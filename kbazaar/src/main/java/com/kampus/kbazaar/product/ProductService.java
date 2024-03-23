@@ -18,6 +18,12 @@ public class ProductService {
         return productRepository.findAll().stream().map(Product::toResponse).toList();
     }
 
+    public List<ProductResponse> getProductByPageAndLimit(int page, int limit) {
+        int offset = (page - 1) * limit;
+        List<Product> products = productRepository.findByPageAndLimit(offset, limit);
+        return products.stream().map(Product::toResponse).toList();
+    }
+
     public ProductResponse getBySku(String sku) {
         Optional<Product> product = productRepository.findBySku(sku);
         if (product.isEmpty()) {
