@@ -3,14 +3,20 @@ package com.kampus.kbazaar.cart;
 import com.kampus.kbazaar.product.Product;
 import lombok.Data;
 
-@Data
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity(name = "cart")
+@Getter
+@Setter
 public class Cart {
-    private int userID;
+    @EmbeddedId private CartId cartId;
+    private Integer quantity;
 
-    private Product[] products;
-
-    public Cart(int userID, Product[] products) {
-        this.userID = userID;
-        this.products = products;
+    public Cart(CartId cartId, Integer quantity) {
+        this.cartId = cartId;
+        this.quantity = quantity;
     }
 }
