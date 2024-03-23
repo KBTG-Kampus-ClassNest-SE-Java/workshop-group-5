@@ -1,4 +1,4 @@
-INSERT INTO cart (quantity,product_sku) VALUES
-	 (2,'MOBILE-APPLE-IPHONE-12-PRO') ON CONFLICT DO NOTHING;
-INSERT INTO cart (quantity,product_sku) VALUES
-	 (1,'MOBILE-SAMSUNG-GALAXY-S21-ULTRA') ON CONFLICT DO NOTHING;
+INSERT INTO cart (shopper_id,products,promotions) VALUES
+	 (1,'[{"id":8,"sku":"MOBILE-OPPO-FIND-X3-PRO","quantity":2}]',NULL) ON CONFLICT DO NOTHING;
+INSERT INTO cart (shopper_id,products,promotions) VALUES
+	 (2,'[{"id":8,"sku":"MOBILE-OPPO-FIND-X3-PRO","quantity":2}]',NULL) ON CONFLICT DO NOTHING;

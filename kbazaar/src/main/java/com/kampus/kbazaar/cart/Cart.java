@@ -1,17 +1,23 @@
 package com.kampus.kbazaar.cart;
 
-import com.kampus.kbazaar.product.Product;
-import jakarta.persistence.Entity;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity(name = "cart")
-@Getter
-@Setter
+@Entity
+@Table(name = "cart")
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Cart {
-    private Long shopper_id;
-    private List<Product> products;
+    @Id
+    @Column(name = "shopper_id")
+    private Long shopperId;
+
+    @Column(name = "products", nullable = true)
+    private String products;
+
+    @Column(name = "promotions", nullable = true)
+    private String promotions;
 }
