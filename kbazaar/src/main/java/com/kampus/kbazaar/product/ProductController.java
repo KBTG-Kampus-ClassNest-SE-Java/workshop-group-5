@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,7 +36,16 @@ public class ProductController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = NotFoundException.class)))
     @GetMapping("/products")
-    public List<ProductResponse> getProducts() {
+    public List<ProductResponse> getProducts(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "limit", defaultValue = "0") int limit) {
+        if (page < 0 || limit < 0) {
+            throw new NotFoundException("Invalid page or limit");
+        }
+        if (page > 0 && limit > 0) {
+            System.out.println(page);
+            return productService.getProductByPageAndLimit(page, limit);
+        }
         return productService.getAll();
     }
 
