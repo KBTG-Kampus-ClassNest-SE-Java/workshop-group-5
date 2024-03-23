@@ -1,8 +1,5 @@
 package com.kampus.kbazaar.cart;
 
-import com.kampus.kbazaar.product.Product;
-import lombok.Data;
-
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.Getter;
