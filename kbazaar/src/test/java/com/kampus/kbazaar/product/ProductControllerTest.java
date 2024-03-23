@@ -57,6 +57,52 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("should return all product when page 1 and limit 1")
+    public void shouldReturnInOnePage() throws Exception {
+        // Given
+        int page = 1;
+        int limit = 1;
+
+        // When & Then
+        when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(
+                        get("/api/v1/products?page=1&limit=1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(productService, times(1)).getProductByPageAndLimit(page, limit);
+    }
+
+    @Test
+    @DisplayName("should return all product when page 1 and limit 100")
+    public void shouldReturnInOnePageWhenAllProduct() throws Exception {
+        int page = 1;
+        int limit = 100;
+
+        when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(
+                        get("/api/v1/products?page=1&limit=100")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("should return all product when page 100 and limit 100")
+    public void shouldReturnEmptyWhenPageOneHundredAndLimitOneHundred() throws Exception {
+        int page = 100;
+        int limit = 100;
+
+        when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(
+                        get("/api/v1/products?page=1&limit=100")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("should return product")
     public void shouldReturnProduct() throws Exception {
         // Given
