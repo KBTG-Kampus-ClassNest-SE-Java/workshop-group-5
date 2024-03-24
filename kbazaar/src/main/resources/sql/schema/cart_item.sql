@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS cart_item (
-	cart_id varchar NOT NULL,
-	product_id varchar NOT NULL,
-	quantity int4 NULL
+    id SERIAL PRIMARY KEY,
+    cart_id int NOT NULL,
+    product_id int NOT NULL,
+    quantity int4 NULL
 );

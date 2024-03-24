@@ -1,12 +1,14 @@
 package com.kampus.kbazaar.cart;
 
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class Item {
     String sku;
     String name;
     BigDecimal quantity;
-    BigDecimal price;
+    Double price;
     BigDecimal discount;
     BigDecimal finalPrice;
 
@@ -34,11 +36,11 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 public class CartResponseDto {
     String username;
     List<Item> items;
-    BigDecimal totalPrice;
+    Double totalPrice;
     BigDecimal totalDiscount;
 
     public String getUsername() {
@@ -25,11 +25,11 @@ public class CartResponseDto {
         this.items = items;
     }
 
-    public BigDecimal getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

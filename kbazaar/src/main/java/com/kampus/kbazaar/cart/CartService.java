@@ -1,29 +1,28 @@
 package com.kampus.kbazaar.cart;
 
-import com.google.gson.Gson;
-import com.kampus.kbazaar.exceptions.NotFoundException;
-import com.kampus.kbazaar.product.Product;
 import com.kampus.kbazaar.product.ProductRepository;
-import com.kampus.kbazaar.shopper.Shopper;
 import com.kampus.kbazaar.shopper.ShopperRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CartService {
     private CartRepository cartRepository;
+    private CartItemRepository cartItemRepository;
     private ShopperRepository shopperRepository;
     private ProductRepository productRepository;
 
     public CartService(
             CartRepository cartRepository,
             ShopperRepository shopperRepository,
-            ProductRepository productRepository) {
+            ProductRepository productRepository,
+            CartItemRepository cartItemRepository) {
         this.cartRepository = cartRepository;
         this.shopperRepository = shopperRepository;
         this.productRepository = productRepository;
+        this.cartItemRepository = cartItemRepository;
     }
 
     public String deleteCartItem(String username, String product_sku) {
@@ -31,65 +30,41 @@ public class CartService {
     }
 
     public CartResponseDto addCartItem(String username, String product_sku, int quantity) {
-        CartResponseDto cartResponseDto = new CartResponseDto();
-
-        Optional<Shopper> shopper = shopperRepository.findByUsername(username);
-
-        if (shopper.isEmpty()) {
-            throw new NotFoundException("Invalid request body");
+        List<Item> items =
+                new ArrayList<>(
+                        List.of(
+                                new Item(
+                                        "MOBILE-APPLE-IPHONE-12-PRO",
+                                        "Apple iPhone 12 Pro",
+                                        BigDecimal.valueOf(1),
+                                        10000.0,
+                                        BigDecimal.valueOf(0),
+                                        BigDecimal.valueOf(1)),
+                                new Item(
+                                        "MOBILE-SAMSUNG-GALAXY-S21-ULTRA",
+                                        "Samsung Galaxy S21 Ultra",
+                                        BigDecimal.valueOf(2),
+                                        2000.0,
+                                        BigDecimal.valueOf(0),
+                                        BigDecimal.valueOf(2)),
+                                new Item(
+                                        "MOBILE-GOOGLE-PIXEL-5",
+                                        "Google Pixel 5",
+                                        BigDecimal.valueOf(3),
+                                        1000.0,
+                                        BigDecimal.valueOf(0),
+                                        BigDecimal.valueOf(3))));
+        CartResponseDto resp = new CartResponseDto();
+        resp.setItems(items);
+        resp.setUsername(username);
+        Double totlPrice = 0.0;
+        for (Item item : items) {
+            totlPrice = totlPrice + item.getPrice();
         }
+        resp.setTotalPrice(totlPrice);
+        resp.setTotalDiscount(BigDecimal.valueOf(0.0));
 
-        Optional<Product> product = productRepository.findBySku(product_sku);
-
-        if (product.isEmpty()) {
-            throw new NotFoundException("Invalid request body");
-        }
-
-        Optional<Cart> cart = cartRepository.findById(shopper.get().getId());
-
-        if (cart.isEmpty()) {
-            // First Time
-
-            ProductDatabase productDatabase = new ProductDatabase();
-
-            productDatabase.setSku(product.get().getSku());
-            productDatabase.setId(Math.toIntExact(product.get().getId()));
-            productDatabase.setQuantity(quantity);
-
-            ArrayList<ProductDatabase> productDatabases = new ArrayList<ProductDatabase>();
-            productDatabases.add(productDatabase);
-
-            String jsonList = new Gson().toJson(productDatabases);
-
-            Cart cartNew = new Cart();
-            cartNew.setProducts(jsonList);
-            cartNew.setShopperId(shopper.get().getId());
-
-            cartRepository.save(cartNew);
-            cartRepository.flush();
-
-            cartResponseDto.setUsername(username);
-
-            ArrayList<Item> itemList = new ArrayList<Item>();
-            Item item = new Item();
-
-            item.setSku(product_sku);
-            item.setName(product.get().getName());
-            item.setQuantity(BigDecimal.valueOf(quantity));
-            item.setPrice(multiply(quantity, product.get().getPrice()));
-            item.setDiscount(BigDecimal.valueOf(0.00));
-            item.setFinalPrice(multiply(quantity, product.get().getPrice()));
-            itemList.add(item);
-
-            cartResponseDto.setTotalDiscount(BigDecimal.valueOf(0.00));
-            cartResponseDto.setTotalPrice(multiply(quantity, product.get().getPrice()));
-
-            cartResponseDto.setItems(itemList);
-        } else {
-
-        }
-
-        return cartResponseDto;
+        return resp;
     }
 
     public static BigDecimal multiply(int a, BigDecimal b) {

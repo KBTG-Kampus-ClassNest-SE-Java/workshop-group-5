@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Cart {
     @Id
-    @Column(name = "shopper_id")
-    private Long shopperId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
+    private Long cartId;
 
-    @Column(name = "products", nullable = true)
-    private String products;
+    @Column(name = "shopper_id", nullable = true)
+    private int shopper_id;
 
     @Column(name = "promotions", nullable = true)
     private String promotions;
