@@ -86,6 +86,50 @@ public class ProductControllerTest {
                         get("/api/v1/products?page=1&limit=100")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        verify(productService, times(1)).getProductByPageAndLimit(page, limit);
+    }
+
+    @Test
+    @DisplayName("should return not found status product when page -1 and limit 100")
+    public void shouldReturnNotFoundReasonWrongPage() throws Exception {
+        int page = -1;
+        int limit = 100;
+
+        when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(
+                        get("/api/v1/products?page=-1&limit=100")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("should return not found status when page -1 and limit -1")
+    public void shouldReturnNotFoundReasonWrongPageAndLimit() throws Exception {
+        int page = 1;
+        int limit = -1;
+
+        when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(
+                        get("/api/v1/products?page=-1&limit=-1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("should return not found status when page 1 and limit -1")
+    public void shouldReturnNotFoundReasonWrongLimit() throws Exception {
+        int page = 1;
+        int limit = -1;
+
+        when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(
+                        get("/api/v1/products?page=1&limit=-1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -97,9 +141,11 @@ public class ProductControllerTest {
         when(productService.getProductByPageAndLimit(page, limit)).thenReturn(new ArrayList<>());
 
         mockMvc.perform(
-                        get("/api/v1/products?page=1&limit=100")
+                        get("/api/v1/products?page=100&limit=100")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        verify(productService, times(1)).getProductByPageAndLimit(page, limit);
     }
 
     @Test

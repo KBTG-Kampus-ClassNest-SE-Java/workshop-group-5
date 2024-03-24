@@ -73,4 +73,16 @@ class KBazaarApplicationIT {
                 .andExpect(jsonPath("$.username").value(username))
                 .andReturn();
     }
+
+    @Test
+    @DisplayName("should return products by page and limit")
+    void getShopperByName_shouldReturnProductByPageAndLimit() throws Exception {
+        mockMvc.perform(
+                        get("/api/v1/products?page=1&limit=20")
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(Matchers.greaterThan(0)))
+                .andReturn();
+    }
 }

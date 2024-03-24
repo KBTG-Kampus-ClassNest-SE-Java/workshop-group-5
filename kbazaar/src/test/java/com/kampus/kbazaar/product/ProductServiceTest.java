@@ -55,6 +55,36 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("should be able to get products by page and limit")
+    void shouldBeAbleToGetProductByPageAndLimit() {
+        // Mock data
+        Product product1 =
+                new Product(
+                        1L,
+                        "Google Pixel 5",
+                        "MOBILE-GOOGLE-PIXEL-5",
+                        new BigDecimal(12990.75),
+                        100);
+        Product product2 =
+                new Product(2L, "Coca-Cola", "BEV-COCA-COLA", new BigDecimal(20.75), 150);
+        List<Product> productList = Arrays.asList(product1, product2);
+
+        int page = 1;
+        int limit = 10;
+        int offset = (page - 1) * limit;
+        // Mock repository method
+        when(productRepository.findByPageAndLimit(offset, 10)).thenReturn(productList);
+
+        // Call service method
+        List<ProductResponse> result = productService.getProductByPageAndLimit(1, 10);
+
+        // Assertions
+        assertEquals(2, result.size());
+        assertEquals("Google Pixel 5", result.get(0).name());
+        assertEquals("BEV-COCA-COLA", result.get(1).sku());
+    }
+
+    @Test
     @DisplayName("should return empty list when no product found")
     void shouldReturnEmptyListWhenNoProductFoundGetAllProducts() {
         // Mock repository method returning empty list
