@@ -1,19 +1,23 @@
 package com.kampus.kbazaar.cart;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity(name = "cart")
-@Getter
-@Setter
+@Entity
+@Table(name = "cart")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cart {
-    @EmbeddedId private CartId cartId;
-    private Integer quantity;
+    @Id
+    @Column(name = "shopper_id")
+    private Long shopperId;
 
-    public Cart(CartId cartId, Integer quantity) {
-        this.cartId = cartId;
-        this.quantity = quantity;
-    }
+    @Column(name = "products", nullable = true)
+    private String products;
+
+    @Column(name = "promotions", nullable = true)
+    private String promotions;
 }

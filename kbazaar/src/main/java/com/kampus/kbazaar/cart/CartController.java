@@ -21,4 +21,15 @@ public class CartController {
     public String deleteCartItem(@PathVariable String username, @PathVariable String product_sku) {
         return cartService.deleteCartItem(username, product_sku);
     }
+
+    @PostMapping("/carts/{username}/items")
+    public CartResponseDto addCartItem(
+            @PathVariable String username, @RequestBody CartRequestDto cartRequestDto) {
+        System.out.println("username : " + username);
+        System.out.println("getProductSku : " + cartRequestDto.getProductSku());
+        System.out.println("getQuantity : " + cartRequestDto.getQuantity());
+
+        return cartService.addCartItem(
+                username, cartRequestDto.getProductSku(), cartRequestDto.getQuantity());
+    }
 }
