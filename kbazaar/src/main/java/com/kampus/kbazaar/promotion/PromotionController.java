@@ -44,6 +44,7 @@ public class PromotionController {
                             schema = @Schema(implementation = NotFoundException.class)))
     @GetMapping("/promotions")
     public ResponseEntity<List<PromotionResponse>> getAllPromotions() {
+
         if (enablePromotionListApi) {
             return ResponseEntity.ok(promotionService.getAll());
         }
